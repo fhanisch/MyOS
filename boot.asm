@@ -22,14 +22,14 @@ main:
 	;print(hello,0,0,grün)
 	push 2			;color
 	push 0			;y
-	push 55			;x
+	push 56			;x
 	push hello		;str
 	call print
 
 	;print(ul,0,0,grün)
 	push 2			;color
 	push 1			;y
-	push 55			;x
+	push 56			;x
 	push ul			;str
 	call print
 
