@@ -13,7 +13,7 @@ cls1:
 
 ;void print(char *str, int x, int y, int color)
 print:
-	pop dx			;ip auf cx
+	pop dx			;ip sichern
 	pop si
 	pop bx
 	pop cx

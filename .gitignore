@@ -1,3 +1,7 @@
+boot.bin
+boot.lst
+kernel.bin
+kernel.lst
 image.bin
 image.lst
 MyOS.cbp
