@@ -1,7 +1,9 @@
 boot.bin
 boot.lst
-kernel.bin
-kernel.lst
+init_pmode.bin
+init_pmode.lst
+asmkernel.o
+asmkernel.lst
 image.bin
 image.lst
 MyOS.cbp

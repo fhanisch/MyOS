@@ -1,10 +1,16 @@
-all: boot.bin kernel.bin image.bin
+all: boot.bin init_pmode.bin asmkernel.o image.bin
 
 boot.bin: boot.asm
-	nasm boot.asm -f bin -o boot.bin -l boot.lst
+	nasm -f bin boot.asm -o boot.bin -l boot.lst
 
-kernel.bin: kernel.asm
-	nasm kernel.asm -f bin -o kernel.bin -l kernel.lst
+init_pmode.bin: init_pmode.asm
+	nasm -f bin init_pmode.asm -o init_pmode.bin -l init_pmode.lst
 
-image.bin: boot.bin kernel.bin
-	cat boot.bin kernel.bin > image.bin
+asmkernel.o: asmkernel.asm
+	nasm -f aout asmkernel.asm -o asmkernel.o -l asmkernel.lst
+
+image.bin: boot.bin init_pmode.bin
+	cat boot.bin init_pmode.bin > image.bin
+
+clear:
+	rm image.bin boot.bin init_pmode.bin
