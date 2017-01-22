@@ -1,3 +1,4 @@
 OUTPUT_FORMAT("binary")
 INPUT(asmkernel.o ckernel.o)
 ENTRY(start)
+

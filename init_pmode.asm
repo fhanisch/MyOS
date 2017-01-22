@@ -62,6 +62,8 @@ pmode:
 
 	mov byte [es:2000], '#'
 	mov byte [es:2001], 4
+	mov byte [0xb8000+2002], 'O'
+	mov byte [0xb8000+2003], 4
 
 	jmp start
 
@@ -100,5 +102,4 @@ gdt_begin:
        	db  0
 gdt_end:
 
-		times 512-($-$$) db 0
 start:
