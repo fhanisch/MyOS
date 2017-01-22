@@ -52,7 +52,7 @@ main:
 	mov es,ax ;Sekmentadresse des Buffers
 	mov bx,0 ;Offsetadrsse des Buffers
 	mov ah,2 ;lesen von Sektoren
-	mov al,1 ;Anzahl zu lesender Sektoren
+	mov al,2 ;Anzahl zu lesender Sektoren
 	mov ch,0 ;Spur
 	mov cl,2 ;erster Sektor
 	mov dx,0x80 ;Kopf,Laufwerksnummer
