@@ -4,6 +4,8 @@ init_pmode.bin
 init_pmode.lst
 asmkernel.o
 asmkernel.lst
+ckernel.o
+kernel.bin
 image.bin
 image.lst
 MyOS.cbp

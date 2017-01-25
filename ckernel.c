@@ -4,7 +4,7 @@ void print()
 {
 	char *VideoMem;
 
-	VideoMem=(char*)0xb8000;	
+	VideoMem=(char*)0xb8000;
 	*VideoMem = 'X';
 	VideoMem++;
 	*VideoMem = 0x0a;
