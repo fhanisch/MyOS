@@ -1,22 +1,21 @@
 //gcc -m32 -ffreestanding -Os -Wall -c ckernel.c
 
-void print()
+void print(char *text)
 {
-	char *VideoMem;
-
-	VideoMem=(char*)0xb8000;
-	*VideoMem = 'X';
-	VideoMem++;
-	*VideoMem = 0x0a;
-	VideoMem++;
-	*VideoMem = 'X';
-	VideoMem++;
-	*VideoMem = 0x0a;
+	unsigned int i=0;
+	char *videoMem;
+	videoMem=(char*)0xb8000;
+	while(text[i])
+	{
+		videoMem[2*i] = text[i];
+		videoMem[2*i+1] = 0x0a;
+		i++;
+	}
 }
 
 int main()
 {
-	print();
+	print("Willkommen im Protected Mode!");
 	while (1);
 	return 0;
 }

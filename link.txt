@@ -1,4 +1,7 @@
 OUTPUT_FORMAT("binary")
 INPUT(asmkernel.o ckernel.o)
 ENTRY(start)
-
+SECTIONS
+{
+	. = 0x1013c;
+}
