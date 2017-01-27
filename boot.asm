@@ -1,20 +1,18 @@
 ;nasm boot.asm -f bin -o image.bin -l image.lst
 ;18.01.2017
 
+	cli				;interrupts blockieren
 	jmp main
 
 %include "screen.asm"
 
 main:
-	cli				;interrupts blockieren
-
-	;stack initialisieren
+	;Stack -und Datensegment initialisieren
 	mov ax, 0x07c0
 	mov ds, ax
 	mov ax, 0x9000
 	mov ss, ax
 	mov sp, 0
-	sti				;interrupts zulassen
 
 	;cls()
 	call cls
@@ -52,7 +50,7 @@ main:
 	mov es,ax ;Sekmentadresse des Buffers
 	mov bx,0 ;Offsetadrsse des Buffers
 	mov ah,2 ;lesen von Sektoren
-	mov al,2 ;Anzahl zu lesender Sektoren
+	mov al,3 ;Anzahl zu lesender Sektoren
 	mov ch,0 ;Spur
 	mov cl,2 ;erster Sektor
 	mov dx,0x80 ;Kopf,Laufwerksnummer

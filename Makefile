@@ -1,3 +1,6 @@
+CC = i686-elf-gcc
+LD = i686-elf-ld
+
 all: boot.bin init_pmode.bin asmkernel.o ckernel.o kernel.bin image.bin
 
 boot.bin: boot.asm
@@ -10,10 +13,10 @@ asmkernel.o: asmkernel.asm
 	nasm -f elf32 asmkernel.asm -o asmkernel.o -l asmkernel.lst
 
 ckernel.o: ckernel.c
-	i686-elf-gcc -ffreestanding -Os -Wall -c ckernel.c
+	$(CC) -ffreestanding -Os -Wall -c ckernel.c
 
 kernel.bin: asmkernel.o ckernel.o
-	i686-elf-ld -T link.txt -o kernel.bin
+	$(LD) -T link.txt -o kernel.bin
 
 image.bin: boot.bin init_pmode.bin kernel.bin
 	cat boot.bin init_pmode.bin kernel.bin > image.bin

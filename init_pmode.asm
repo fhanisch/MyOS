@@ -30,14 +30,38 @@ main:
 	push msg3		;str
 	call print
 
+	;Interrupt Controller prgrammieren
+	mov     al,0x11
+	out     0x20,al
+	out     0xa0,al
+	mov     al,0x20
+	out     0x21,al
+	mov     al,0x28
+	out     0xa1,al
+	mov     al,4
+	out     0x21,al
+	mov     al,2
+	out     0xa1,al
+	mov     al,1
+	out     0x21,al
+	out     0xa1,al
+
 	;gdt eintragen
 	xor     eax, eax
 	mov     eax, cs
 	shl     eax, 4
 	add     eax, gdt_begin
 	mov     [base], eax
-	mov     [limit], WORD gdt_end - gdt_begin -1
+	mov     [limit], word gdt_end - gdt_begin -1
 	lgdt    [gdt]
+
+	;idt eintragen
+	xor     eax,eax
+	mov     eax,0x10000
+	add     eax,idt_begin
+	mov     [ibase],eax
+	mov     [ilimit], word idt_end - idt_begin -1
+	lidt    [idt]
 
 	;in den pmode schalten
 	mov     eax, cr0
@@ -60,22 +84,33 @@ pmode:
 	mov es, ax
 	mov esp, 0x90000	;setze Stackpointer
 
-	mov byte [es:2000], '#'
-	mov byte [es:2001], 4
-	mov byte [0xb8000+2002], 'O'
-	mov byte [0xb8000+2003], 4
+	mov al,[0x10000+letter]
+	mov byte [es:154],al
+	mov byte [es:155],4
 
 	jmp start
+
+;Interrupt Service Routine
+isr:
+	mov byte [es:158],'#'
+	mov byte [es:159],4
+	iret
 
 ;Daten
 msg		db 'Kernel geladen.', 0
 msg2 	db 'Das ist ein Schreibtest !!!!!!!', 0
 msg3	db 'Initialisiere Protected Mode.', 0
+letter  db 'Q'
 
 gdt:
 	limit	dw  0
 	base	dd  0
 
+idt:
+	ilimit	dw  0
+	ibase	dd  0
+
+;Descriptors
 gdt_begin:
 		;Null-Deskriptor
 		dd  0, 0
@@ -101,5 +136,9 @@ gdt_begin:
        	db  11000000b
        	db  0
 gdt_end:
+
+%include "idt.asm"
+
+	times 1024-($-$$) db 0
 
 start:
