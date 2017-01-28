@@ -13,13 +13,10 @@ cls1:
 
 ;void print(char *str, int x, int y, int color)
 print:
-	pop dx			;ip sichern
+	pop bp			;ip sichern
 	pop si
 	pop bx
 	pop cx
-	pop ax
-	push dx
-	mov byte [ds:color], al
 	mov ax, 0xb800
 	mov es, ax
 	mov ax, 160
@@ -32,11 +29,12 @@ print1:
 	jz print2
 	mov byte [es:di], al
 	inc di
-	mov byte al, [ds:color]
-	mov byte [es:di], al
+	pop dx
+	mov byte [es:di], dl
+	push dx
 	inc di
 	inc si
 	jmp print1
 print2:
+	push bp
 	ret
-color	db 0

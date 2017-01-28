@@ -17,7 +17,7 @@ main:
 	;cls()
 	call cls
 
-	;print(hello,0,0,grün)
+	;print(hello,56,0,grün)
 	push 2			;color
 	push 0			;y
 	push 56			;x
@@ -50,7 +50,8 @@ main:
 	mov es,ax ;Sekmentadresse des Buffers
 	mov bx,0 ;Offsetadrsse des Buffers
 	mov ah,2 ;lesen von Sektoren
-	mov al,3 ;Anzahl zu lesender Sektoren
+	mov al,4 ;Anzahl zu lesender Sektoren
+	push ax
 	mov ch,0 ;Spur
 	mov cl,2 ;erster Sektor
 	mov dx,0x80 ;Kopf,Laufwerksnummer
@@ -65,7 +66,8 @@ main:
 	call print
 	call main1
 
-a1:	add al,0x30
+a1:	pop ax
+	add al,0x30
 	mov byte [ds:str1],al
 
 	;print(str1,0,4,?)

@@ -3,7 +3,9 @@
 BITS 32
 
 extern main
+extern irq1
 global start
+global getkey
 
 start:
 	;Adressen der ISR in die IDT eintragen
@@ -22,12 +24,34 @@ start:
 	sti			;Interrupts zulassen
 	call main	;Sprung in den C-Kernel
 
+loop:
+	jmp loop
+
 isr_key:
-	mov byte [0xb8000+156], 'T'
-	mov byte [0xb8000+157], 4
+	push eax
+	xor eax, eax
+	in	al, 0x60
+	push eax
+	call irq1
 	mov al,0x20
 	out 0x20,al
+	pop eax
+	pop eax
 	iret
+
+getkey:
+	push ebp
+	mov ebp, esp
+	push eax
+	push ebx
+	mov eax,[ebp+8]
+gk:	mov ebx,[eax]
+    cmp ebx,1
+	jnz gk
+	pop ebx
+	pop eax
+	pop ebp
+	ret
 
 idt:
 	ilimit	dw  0

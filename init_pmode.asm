@@ -5,9 +5,9 @@ BITS 16
 	%include "screen.asm"
 
 main:
-	;print(msg,0,10,?)
+	;print(msg,0,5,?)
 	push 4			;color
-	push 10			;y
+	push 5			;y
 	push 0			;x
 	push msg		;str
 	call print
@@ -23,9 +23,9 @@ main:
 	;mov dx,0x80 ;Kopf,Laufwerksnummer
 	;int 0x13
 
-	;print(msg3,0,11,?)
+	;print(msg3,0,6,?)
 	push 0x0a		;color
-	push 11			;y
+	push 6			;y
 	push 0			;x
 	push msg3		;str
 	call print
@@ -69,6 +69,11 @@ main:
 	mov     cr0, eax
 	jmp     long 0x8:0x10000+pmode
 
+;Daten
+msg		db 'Kernel geladen.', 0
+msg2 	db 'Das ist ein Schreibtest !!!!!!!', 0
+msg3	db 'Initialisiere Protected Mode.', 0
+
 ;--------------------------------------------------------------------
 ;Protected Mode
 BITS 32
@@ -92,15 +97,12 @@ pmode:
 
 ;Interrupt Service Routine
 isr:
-	mov byte [es:158],'#'
+	mov byte [es:158],'I'
 	mov byte [es:159],4
 	iret
 
 ;Daten
-msg		db 'Kernel geladen.', 0
-msg2 	db 'Das ist ein Schreibtest !!!!!!!', 0
-msg3	db 'Initialisiere Protected Mode.', 0
-letter  db 'Q'
+letter  db 'P'
 
 gdt:
 	limit	dw  0
