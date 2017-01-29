@@ -28,15 +28,15 @@ loop:
 	jmp loop
 
 isr_key:
-	push eax
+	pushad
 	xor eax, eax
 	in	al, 0x60
 	push eax
 	call irq1
+	add esp, 4
 	mov al,0x20
 	out 0x20,al
-	pop eax
-	pop eax
+	popad
 	iret
 
 getkey:
@@ -45,8 +45,8 @@ getkey:
 	push eax
 	push ebx
 	mov eax,[ebp+8]
-gk:	mov ebx,[eax]
-    cmp ebx,1
+gk:	mov bl,[eax]
+	cmp bl,1
 	jnz gk
 	pop ebx
 	pop eax
