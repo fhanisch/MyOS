@@ -1,7 +1,7 @@
 CC = i686-elf-gcc
 LD = i686-elf-ld
 
-all: boot.bin init_pmode.bin asmkernel.o ckernel.o kernel.bin image.bin
+all: image.bin
 
 boot.bin: boot.asm screen.asm
 	nasm -f bin boot.asm -o boot.bin -l boot.lst
@@ -22,4 +22,5 @@ image.bin: boot.bin init_pmode.bin kernel.bin
 	cat boot.bin init_pmode.bin kernel.bin > image.bin
 
 clean:
-	rm image.bin boot.bin init_pmode.bin asmkernel.o ckernel.o kernel.bin
+	rm *.bin *.o *.lst
+
