@@ -50,7 +50,7 @@ main:
 	mov es,ax ;Sekmentadresse des Buffers
 	mov bx,0 ;Offsetadrsse des Buffers
 	mov ah,2 ;lesen von Sektoren
-	mov al,4 ;Anzahl zu lesender Sektoren
+	mov al,6 ;Anzahl zu lesender Sektoren
 	push ax
 	mov ch,0 ;Spur
 	mov cl,2 ;erster Sektor

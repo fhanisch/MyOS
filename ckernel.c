@@ -1,6 +1,8 @@
 //gcc -m32 -ffreestanding -Os -Wall -c ckernel.c
 
 void getkey(char*);
+char inport(short port);
+void outport(short port, char value);
 
 char *videoMem = (char*)0xb8000;
 char key[256];
@@ -48,6 +50,42 @@ void window(char x, char y, char width, char height, char color)
 		}
 }
 
+void setFrame(char x, char y, char width, char height)
+{
+	unsigned int i;
+
+	videoMem[2*(x + 80*y)] = 0xc9;
+	videoMem[2*(x + 80*y)+1] = 0x1a;
+	videoMem[2*(x+width-1 + 80*y)] = 0xbb;
+	videoMem[2*(x+width-1 + 80*y)+1] = 0x1a;
+
+	videoMem[2*(x + 80*(y+height-1))] = 0xc8;
+	videoMem[2*(x + 80*(y+height-1))+1] = 0x1a;
+	videoMem[2*(x+width-1 + 80*(y+height-1))] = 0xbc;
+	videoMem[2*(x+width-1 + 80*(y+height-1))+1] = 0x1a;
+
+	for (i=1;i<width-1;i++)
+	{
+		videoMem[2*(x + 80*y + i)] = 0xcd;
+		videoMem[2*(x + 80*y + i)+1] = 0x1a;
+	}
+	for (i=1;i<width-1;i++)
+	{
+		videoMem[2*(x + 80*(y+height-1) + i)] = 0xcd;
+		videoMem[2*(x + 80*(y+height-1) + i)+1] = 0x1a;
+	}
+	for (i=1;i<height-1;i++)
+	{
+		videoMem[2*(x + 80*y + 80*i)] = 0xba;
+		videoMem[2*(x + 80*y + 80*i)+1] = 0x1a;
+	}
+	for (i=1;i<height-1;i++)
+	{
+		videoMem[2*(x+width-1 + 80*y + 80*i)] = 0xba;
+		videoMem[2*(x+width-1 + 80*y + 80*i)+1] = 0x1a;
+	}
+}
+
 int main()
 {
 	init_keys();
@@ -57,6 +95,7 @@ int main()
 	getkey(&isKey[0x1c]);
 	isKey[0x1c]=0;
 	window(0,0,80,25,0x11);
+	setFrame(0,1,80,23);
 
 	return 0;
 }
@@ -66,4 +105,28 @@ void irq1(int scancode)
 	isKey[scancode] = 1;
 	videoMem[156] = key[scancode];
 	videoMem[157] = 0x1a;
+}
+
+void irq8()
+{
+	unsigned int i;
+	char xOffset=63;
+	char value;
+	char offset[] = {7,8,9,4,2,0};
+	char limiter[] ={'.','.',' ',':',':',' '};
+
+	for (i=0;i<sizeof(offset);i++)
+	{
+		outport(0x70,offset[i]);
+		value=inport(0x71);
+		videoMem[2*(xOffset+80*24)] = (value>>4)+0x30;
+		videoMem[2*(xOffset+80*24)+1] = 0x1a;
+		xOffset++;
+		videoMem[2*(xOffset+80*24)] = (value&0x0f)+0x30;
+		videoMem[2*(xOffset+80*24)+1] = 0x1a;
+		xOffset++;
+		videoMem[2*(xOffset+80*24)] = limiter[i];
+		videoMem[2*(xOffset+80*24)+1] = 0x1a;
+		xOffset++;
+	}
 }
