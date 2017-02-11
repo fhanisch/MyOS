@@ -96,6 +96,7 @@ int main()
 	isKey[0x1c]=0;
 	window(0,0,80,25,0x11);
 	setFrame(0,1,80,23);
+	print("My Operating System",28,0,0x1c);
 
 	return 0;
 }
